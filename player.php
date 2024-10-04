@@ -28,5 +28,10 @@ class Player {
     public function setMatchesWon(int $matchesWon) {
         $this->matchesWon = $matchesWon;
     }
+
+    // toString
+    public function __toString(){
+        return "Player name : $this->name has won $this->matchesWon matches in tournment.";
+    }
 }
 ?>

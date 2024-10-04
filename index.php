@@ -17,6 +17,9 @@ $player1 = new Player("Pedro");
 $player2 = new Player("Juan");
 $tennis_match = new Play($player1, $player2);
 
+echo $player1->__toString() . PHP_EOL;
+echo $player2->__toString() . PHP_EOL;
+
 echo PHP_EOL;
 echo "El tennis : Cada Set se gana una vez se ha vencido en 6 Games. Si los jugadores llegan a igualar a 5 Games, entonces el Set se extiende hasta ganar 7 Games, en lugar de 6.";
 echo PHP_EOL;
@@ -39,7 +42,16 @@ var_dump($winner_name);
 echo PHP_EOL;
 echo "Ahora jugaremos todo el partido. El Match se gana habiendo ganado 3 de 5 Sets. Veamos el score y pidamos anunciar al ganador";
 echo PHP_EOL;
-$match = $tennis_match->Match();
-var_dump($match);
+$tennis_match->Match();
+var_dump($tennis_match);
+
+echo PHP_EOL;
+echo "El var_dump anterior (clase Play) ya arrojó los scores actualizados una vez jugado el partido. También podemos verrificar que se haya modificado el rating del ganador haciendo un __toString de las instancias de la clase Player";
+echo PHP_EOL;
+echo $player1->__toString() . PHP_EOL;
+echo $player2->__toString() . PHP_EOL;
+echo PHP_EOL;
+
+echo $tennis_match->bestSet();
 
 ?>
