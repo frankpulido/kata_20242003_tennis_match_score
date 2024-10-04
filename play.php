@@ -22,7 +22,7 @@ class Play {
         return $this->player2;
     }
 
-    // Binary function assigns winner
+    // Function GAME : Binary function assigns winner
     public function Game() : string {
         $winner = random_int(0,1);
         $game = [];
@@ -31,6 +31,7 @@ class Play {
         return $game;
     }
 
+    // function SET : The Set winner is first to win 6 or 7 games
     public function Set() : array {
         $set = 6;
         $game = NULL;
@@ -42,41 +43,33 @@ class Play {
             if($this->getPlayer1()->getName() == $game) {$gamesWithKeys[$this->getPlayer1()->getName()] += 1;}
             if($this->getPlayer2()->getName() == $game) {$gamesWithKeys[$this->getPlayer2()->getName()] += 1;}
             if($gamesWithKeys[$this->getPlayer1()->getName()] == 5 && $gamesWithKeys[$this->getPlayer2()->getName()] == 5) {$set = 7;}
-            //$games[] = $this->Game();
-            //$gamesWithKeys = array_count_values($games);
-            /*
-            unset($checkTiedFive);
-            foreach ($gamesWithKeys as $key=>$value) {
-                $checkTiedFive[] = $value;
-            }
-            if($checkTiedFive[0] == 5 && $checkTiedFive[1] == 5){$set = 7;}
-            */
         } while (max($gamesWithKeys) < $set);
         return $gamesWithKeys;
     }
 
+    // function MATCH : Match winner is first to win 3 sets. Therefore, a match ranges from 3 to 5 Sets.
     public function Match() {
-        $sets = [];
+        //https://stackoverflow.com/questions/7068724/getting-an-array-key-using-the-max-function
+        $set = NULL;
+        //$sets = [];
         $match = [];
-        $matchWithKeys = [];
+        $matchWithKeys = [$this->getPlayer1()->getName() => 0, $this->getPlayer2()->getName() => 0];
         $matchesWonPlayer1 = $this->getPlayer1()->getMatchesWon();
         $matchesWonPlayer2 = $this->getPlayer2()->getMatchesWon();
-        do {           
-            $sets[] = $this->Set();
-            foreach($sets as $set) {
-                foreach($set as $key=>$value) {
-                    if(max($set) == $value) {$match[] = $key;}
-                }
-            }
-            $matchWithKeys = array_count_values($match);
-            foreach($matchWithKeys as $player=>$setsWon) {
-                if($setsWon == 3){
-                    if($this->getPlayer1()->getName() == $player) {$matchesWonPlayer1++; $this->getPlayer1()->setMatchesWon($matchesWonPlayer1);}
-                    if($this->getPlayer2()->getName() == $player) {$matchesWonPlayer2++; $this->getPlayer2()->setMatchesWon($matchesWonPlayer2);}
-                }
-            }
-        } while (max($matchWithKeys) <= 3);
-        return $sets;
+        do {
+            $set = $this->Set();
+            $winner_name = array_keys($set, max($set));
+            if($this->getPlayer1()->getName() == $winner_name[0]) {$matchWithKeys[$this->getPlayer1()->getName()] += 1;}
+            if($this->getPlayer2()->getName() == $winner_name[0]) {$matchWithKeys[$this->getPlayer2()->getName()] += 1;}
+            
+            var_dump($matchWithKeys);
+            
+        } while (max($matchWithKeys) < 3);
+
+        if($matchWithKeys[$this->getPlayer1()->getName()] == 3) {$matchesWonPlayer1++; $this->getPlayer1()->setMatchesWon($matchesWonPlayer1);}
+        if($matchWithKeys[$this->getPlayer2()->getName()] == 3) {$matchesWonPlayer2++; $this->getPlayer2()->setMatchesWon($matchesWonPlayer2);}
+
+        return $matchWithKeys;
     }
 }
 ?>
